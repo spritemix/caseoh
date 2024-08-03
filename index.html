@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseOh Jumping Jacks</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #222;
+            color: #fff;
+        }
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        #gif {
+            width: 500px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        #death-count {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .death-item {
+            margin: 5px;
+        }
+        #total-deaths {
+            position: relative;
+            width: 300px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #time {
+            position: relative;
+            width: 300px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="time"></div>
+        <div id="total-deaths"></div>
+        <img id="gif" src="https://media1.tenor.com/m/LdQKla40f_UAAAAC/caseoh-case-oh.gif" alt="CaseOh Jumping Jacks">
+        <div id="death-count"></div>
+    </div>
+    <script>
+        const gif = document.getElementById('gif');
+        const deathCountContainer = document.getElementById('death-count');
+        const totalDeathsContainer = document.getElementById('total-deaths');
+        const timeContainer = document.getElementById('time');
+        const countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Côte d'Ivoire", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"];
+        const countryDeaths = {};
+        let totalDeaths = 0;
+        const deathReasons = ["massive shockwave", "powerful earthquake", "being launched into space", "tsunami"];
+        let startTime = Date.now();
+        
+        // Update timer every second
+        setInterval(() => {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            const seconds = elapsedTime % 60;
+            const minutes = Math.floor(elapsedTime / 60) % 60;
+            const hours = Math.floor(elapsedTime / 3600);
+            timeContainer.textContent = `Time: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // Update deaths every 6 seconds
+        setInterval(() => {
+            const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+            let randomDeathCount = Math.floor(Math.random() * (10000 - 10 + 1)) + 10;
+            if (countryDeaths[randomCountry]) {
+                randomDeathCount += Math.floor(Math.random() * (10000 - 10 + 1)) + 10;
+            }
+            const randomDeathReason = deathReasons[Math.floor(Math.random() * deathReasons.length)];
+            countryDeaths[randomCountry] = randomDeathCount;
+            totalDeaths += randomDeathCount;
+            const deathItem = document.createElement('div');
+            deathItem.classList.add('death-item');
+            deathItem.textContent = `${randomCountry}: ${randomDeathCount} dead by ${randomDeathReason}`;
+            deathCountContainer.appendChild(deathItem);
+            totalDeathsContainer.textContent = `Total Deaths: ${totalDeaths}`;
+        }, 6000);
+    </script>
+</body>
+</html>
